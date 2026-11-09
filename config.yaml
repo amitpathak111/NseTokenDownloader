@@ -1,0 +1,30 @@
+# nse_tokens configuration. Relative paths are relative to this file.
+# Override location with --config or NSE_TOKENS_CONFIG.
+
+# THE shared file. Point every project (tmcore: tokens.csv_path) at this same path.
+# Use an absolute path to share between folders, e.g.  C:\market_data\tokens.csv
+output_csv: data/tokens.csv
+
+download_dir: downloads            # raw NSE .csv.gz files are kept here
+cm_url: "https://nsearchives.nseindia.com/content/cm/NSE_CM_security_{DDMMYYYY}.csv.gz"
+fo_url: "https://nsearchives.nseindia.com/content/fo/NSE_FO_contract_{DDMMYYYY}.csv.gz"
+lookback_days: 7                   # no file for the day (holiday/closed/not published)? try up to N earlier days.
+                                   # Weekends ARE tried too (Budget Saturday, Diwali Muhurat Sunday sessions).
+timeout_sec: 30
+timezone: Asia/Kolkata             # decides what "today" means
+log_level: INFO
+
+# Cash-index rows are not in NSE's security master, so they are added here.
+# name must match the exchange's index name exactly; the code is yours to choose (keep it stable).
+indices:
+  Nifty 50: 900001
+  Nifty Bank: 900002
+
+# Previous close / volume / open interest come from NSE's daily bhavcopy (published after end of day).
+# Joined to the master files by exchange token; indices by name. Same weekend/holiday fallback as above.
+bhav:
+  enabled: true
+  cm_url: "https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_{YYYYMMDD}_F_0000.csv.zip"
+  fo_url: "https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{YYYYMMDD}_F_0000.csv.zip"
+  index_url: "https://nsearchives.nseindia.com/content/indices/ind_close_all_{DDMMYYYY}.csv"
+  fo_close: close                  # F&O reference price: "close" (ClsPric) or "settlement" (SttlmPric)

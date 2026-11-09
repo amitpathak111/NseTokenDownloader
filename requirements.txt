@@ -1,0 +1,2 @@
+PyYAML>=6.0
+tzdata>=2024.1       # IANA timezone data (needed on Windows)
